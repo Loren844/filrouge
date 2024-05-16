@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.DisplayMetrics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +20,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        List<Product> productList = new ArrayList<>();
-        productList.add(new Product("Product 1", "$19.99", "Description 1", R.drawable.product1));
-        productList.add(new Product("Product 2", "$29.99", "Description 2", R.drawable.product2));
-        productList.add(new Product("Product 3", "$39.99", "Description 3", R.drawable.product3));
+        // Animation du logo Zonama
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        float startTranslationX = -screenWidth;
+        float endTranslationX = screenWidth;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(findViewById(R.id.logo), "translationX", startTranslationX, endTranslationX);
+        animator.setDuration(6000);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.start();
     }
 }
 
