@@ -47,16 +47,4 @@ public class ProductFragment extends Fragment {
 
         return view;
     }
-
-    public static ProductFragment newInstance(Product product) {
-        ProductFragment fragment = new ProductFragment();
-        Bundle args = new Bundle();
-        args.putString("name", product.getName());
-        args.putString("price", product.getPrice());
-        args.putString("description", product.getDescription());
-        args.putInt("imageResourceId", product.getImageResourceId());
-        fragment.setArguments(args);
-        return fragment;
-    }
 }
-

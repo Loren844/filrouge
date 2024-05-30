@@ -4,44 +4,53 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import r411.filrouge.Product;
+import r411.filrouge.ProductListAdapter;
+import r411.filrouge.R;
+
 public class ProductListFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private ProductListAdapter productListAdapter;
+    private List<Product> productList;
 
     public ProductListFragment() {
-        // Required empty public constructor
+        // Constructeur vide requis
+    }
+
+    public static ProductListFragment newInstance(List<Product> productList) {
+        ProductListFragment fragment = new ProductListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("productList", new ArrayList<>(productList));
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_product_list, container, false);
-
-        recyclerView = view.findViewById(R.id.recycler_view);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
-        recyclerView.setLayoutManager(layoutManager);
-
-        List<Product> productList = getProductList();
-        productListAdapter = new ProductListAdapter(requireContext(), productList);
-        recyclerView.setAdapter(productListAdapter);
-
-        return view;
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            productList = (List<Product>) getArguments().getSerializable("productList");
+        } else {
+            productList = new ArrayList<>(); // Initialiser productList pour éviter NullPointerException
+        }
     }
 
-    private List<Product> getProductList() {
-        List<Product> productList = new ArrayList<>();
-        productList.add(new Product("Product 1212454464", "$19.99", "Description 1", R.drawable.product1));
-        productList.add(new Product("Product 2", "$29.99", "Description 2", R.drawable.product2));
-        productList.add(new Product("Product 3", "$39.99", "Description 3", R.drawable.product3));
-        return productList;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_product_list, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ProductListAdapter adapter = new ProductListAdapter(getContext(), productList);
+        recyclerView.setAdapter(adapter);
+        return view;
     }
 }

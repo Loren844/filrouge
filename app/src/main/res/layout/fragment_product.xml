@@ -39,6 +39,19 @@
             android:layout_marginTop="16dp"
             android:text="Description détaillée du produit..." />
 
+        <TextView
+            android:id="@+id/product_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:paddingTop="2dp" />
+
+        <TextView
+            android:id="@+id/product_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:paddingTop="2dp" />
     </LinearLayout>
 
 
