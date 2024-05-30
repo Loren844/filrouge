@@ -31,7 +31,6 @@ public class ProductFragment extends Fragment {
         productNameTextView = view.findViewById(R.id.product_name);
         productPriceTextView = view.findViewById(R.id.product_price);
         productDescriptionTextView = view.findViewById(R.id.product_description);
-        RatingBar rb = (RatingBar) view.findViewById(R.id.ratingBar);
 
         // Retrieve product data from arguments
         Bundle args = getArguments();
