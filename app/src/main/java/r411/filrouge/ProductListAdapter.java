@@ -55,7 +55,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             title = itemView.findViewById(R.id.product_name);
             price = itemView.findViewById(R.id.product_price);
             image = itemView.findViewById(R.id.product_image);
-            rating = itemView.findViewById(R.id.product_rating);
+            rating = itemView.findViewById(R.id.product_avgRating);
             count = itemView.findViewById(R.id.product_count);
             description = itemView.findViewById(R.id.product_description);
         }

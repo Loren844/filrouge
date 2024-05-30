@@ -32,6 +32,23 @@
             android:text="$99.99" />
 
         <TextView
+            android:id="@+id/product_avgRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:text="Note moyenne: 0.0" />
+
+        <TextView
+            android:id="@+id/product_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            android:text="Nombre d'avis : 0" />
+
+
+        <TextView
             android:id="@+id/product_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,19 +56,15 @@
             android:layout_marginTop="16dp"
             android:text="Description détaillée du produit..." />
 
-        <TextView
-            android:id="@+id/product_rating"
-            android:layout_width="match_parent"
+        <RatingBar android:id="@+id/ratingBar"
+            style="@style/lightRatingBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:paddingTop="2dp" />
+            android:numStars="5"
+            android:rating="0"
+            android:stepSize="1">
+        </RatingBar>
 
-        <TextView
-            android:id="@+id/product_count"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:paddingTop="2dp" />
     </LinearLayout>
 
 
