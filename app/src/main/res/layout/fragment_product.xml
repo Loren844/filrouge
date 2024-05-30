@@ -8,36 +8,45 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:text="Nom du produit" />
+
         <ImageView
             android:id="@+id/product_image"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:scaleType="centerInside" />
-
-        <TextView
-            android:id="@+id/product_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:text="Nom du produit" />
+            android:scaleType="centerInside"/>
 
         <TextView
             android:id="@+id/product_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:layout_marginTop="8dp"
             android:text="$99.99" />
+
+        <RatingBar android:id="@+id/product_ratingBar"
+            style="@style/lightRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="0"
+            android:stepSize="1">
+        </RatingBar>
 
         <TextView
             android:id="@+id/product_avgRating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:layout_marginTop="8dp"
             android:text="Note moyenne: 0.0" />
 
@@ -45,7 +54,7 @@
             android:id="@+id/product_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:layout_marginTop="8dp"
             android:text="Nombre d'avis : 0" />
 
@@ -54,18 +63,9 @@
             android:id="@+id/product_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:layout_marginTop="16dp"
             android:text="Description détaillée du produit..." />
-
-        <RatingBar android:id="@+id/ratingBar"
-            style="@style/lightRatingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:rating="0"
-            android:stepSize="1">
-        </RatingBar>
 
     </LinearLayout>
 
