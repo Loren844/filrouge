@@ -58,7 +58,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.rating.setText(String.valueOf("Note moyenne : " + product.getRating().getRate()));
         holder.count.setText(String.valueOf(product.getRating().getCount()) + " avis");
         String description = product.getDescription();
-        int maxLength = 200;
+        int maxLength = 100;
         if (description.length() > maxLength) {
             int endIndex = maxLength;
             while (endIndex < description.length() && description.charAt(endIndex) != '.' && description.charAt(endIndex) != ',') {
