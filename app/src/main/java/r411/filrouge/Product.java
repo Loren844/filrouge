@@ -35,6 +35,8 @@ public class Product implements Parcelable {
     @JsonProperty("rating")
     private Rating rating;
 
+    int rate = -1;
+
     public Product() {
     }
 
@@ -162,5 +164,16 @@ public class Product implements Parcelable {
         }
     }
 
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
+
+    public boolean isRated() {
+        return rate != -1;
+    }
 }
 

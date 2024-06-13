@@ -82,14 +82,14 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 int newCount = product.getRating().getCount();
                 double newAvgRating;
 
-                if(holder.rate == -1) {
+                if(!product.isRated()) {
                     newCount = product.getRating().getCount() + 1;
                     holder.count.setText(String.valueOf(newCount) + " avis");
-                    holder.rate = (int) rating;
+                    product.setRate((int) rating);
                     newAvgRating = ((product.getRating().getRate() * product.getRating().getCount()) + rating) / newCount;
                 } else {
-                    newAvgRating = ((product.getRating().getRate() * product.getRating().getCount()) - holder.rate + rating) / newCount;
-                    holder.rate = (int) rating;
+                    newAvgRating = ((product.getRating().getRate() * product.getRating().getCount()) - product.getRate() + rating) / newCount;
+                    product.setRate((int) rating);
                 }
                 holder.rating.setText(String.format(Locale.getDefault(), "Note moyenne : %.1f", newAvgRating));
                 newAvgRating = Math.round(newAvgRating * 10) / 10.0;
@@ -97,6 +97,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 product.getRating().setCount(newCount);
             }
         });
+
+        holder.ratingBar.setRating((float) product.getRate());
 
         //si l'activité est CartActivity, on cache certaines infos et on affiche d'autres
         if(context.getClass().getSimpleName().equals("CartActivity")) {
@@ -201,9 +203,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         Button add_to_cart_button = itemView.findViewById(R.id.add_to_cart_button);
         Button delete_to_cart_button = itemView.findViewById(R.id.delete_to_cart_button);
         ImageButton like_button = itemView.findViewById(R.id.like_button);
-
         TextView nb_product_in_cart = itemView.findViewById(R.id.nb_product_in_cart);
-        int rate = -1;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
