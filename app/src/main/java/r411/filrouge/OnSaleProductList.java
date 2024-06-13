@@ -1,10 +1,15 @@
 package r411.filrouge;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 
-public class OnSaleProductList implements Serializable {
+public class OnSaleProductList implements Serializable, Parcelable {
     private static final long serialVersionUID = 1L;
     private static OnSaleProductList instance;
     private List<Product> onSaleProductList;
@@ -26,5 +31,15 @@ public class OnSaleProductList implements Serializable {
 
     public List<Product> getUserList() {
         return onSaleProductList;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeList(this.onSaleProductList);
     }
 }

@@ -6,13 +6,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -61,6 +64,24 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 Log.e("MainActivity", "Erreur de requête API", t);
                 Toast.makeText(MainActivity.this, "Erreur de connexion", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Passer au panier d'achat
+        findViewById(R.id.button_cart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Passer aux produits likés
+        findViewById(R.id.button_liked).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LikedItemsActivity.class);
+                startActivity(intent);
             }
         });
     }

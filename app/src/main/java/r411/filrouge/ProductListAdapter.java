@@ -1,12 +1,17 @@
 package r411.filrouge;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
@@ -19,10 +24,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private Context context;
     private List<Product> productList;
-    OnSaleProductList onSaleProductList = OnSaleProductList.getInstance();
+    OnSaleProductList onSaleProductList;
 
     public ProductListAdapter(Context context) {
         this.context = context;
+        this.onSaleProductList = OnSaleProductList.getInstance();
         this.productList = onSaleProductList.getUserList();
     }
 
@@ -60,6 +66,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.description.setText(description);
         Picasso.get().load(product.getImage()).into(holder.image);
 
+        //si le produit est déjà liké, on change l'icone
+        if(LikedItems.getInstance().isProductLiked(product)) {
+            holder.like_button.setBackground(context.getDrawable(R.drawable.liked_fill));
+        } else {
+            holder.like_button.setBackground(context.getDrawable(R.drawable.liked));
+        }
+
         holder.ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -76,11 +89,64 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     holder.rate = (int) rating;
                 }
                 holder.rating.setText(String.format(Locale.getDefault(), "Note moyenne : %.1f", newAvgRating));
+                newAvgRating = Math.round(newAvgRating * 10) / 10.0;
                 product.getRating().setRate(newAvgRating);
                 product.getRating().setCount(newCount);
             }
         });
+
+        //si l'activité est CartActivity, on cache certaines infos
+        if(context.getClass().getSimpleName().equals("CartActivity")) {
+            holder.add_to_cart_button.setVisibility(View.GONE);
+            holder.ratingBar.setVisibility(View.GONE);
+            holder.rating.setVisibility(View.GONE);
+            holder.count.setVisibility(View.GONE);
+            holder.delete_to_cart_button.setVisibility(View.VISIBLE);
+        } else {
+            holder.delete_to_cart_button.setVisibility(View.GONE);
+        }
+
+        holder.add_to_cart_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAddToCartButtonClicked(product);
+            }
+        });
+
+        holder.like_button.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            @Override
+            public void onClick(View v) {
+                if (LikedItems.getInstance().isProductLiked(product)) {
+                    LikedItems.getInstance().removeProduct(product);
+                    holder.like_button.setBackground(context.getDrawable(R.drawable.liked));
+                    //si l'activité est LikedItemsActivity, on supprime le produit de la liste
+                    if(context.getClass().getSimpleName().equals("LikedItemsActivity")) {
+                        productList.remove(product);
+                        notifyDataSetChanged();
+                    }
+                } else {
+                    LikedItems.getInstance().addProduct(product);
+                    holder.like_button.setBackground(context.getDrawable(R.drawable.liked_fill));
+                }
+            }
+        });
+
+        holder.delete_to_cart_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Cart.getInstance().removeProduct(product);
+                productList.remove(product);
+                notifyDataSetChanged();
+            }
+        });
     }
+
+    public void onAddToCartButtonClicked(Product product) {
+        Cart.getInstance().addProduct(product, 1);
+        Toast.makeText(this.context, "Produit ajouté au panier", Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public int getItemCount() {
@@ -91,6 +157,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         TextView title, price, rating, count, description;
         ImageView image;
         RatingBar ratingBar = itemView.findViewById(R.id.product_ratingBar);
+        Button add_to_cart_button = itemView.findViewById(R.id.add_to_cart_button);
+        Button delete_to_cart_button = itemView.findViewById(R.id.delete_to_cart_button);
+        ImageButton like_button = itemView.findViewById(R.id.like_button);
         int rate = -1;
 
         public ProductViewHolder(@NonNull View itemView) {

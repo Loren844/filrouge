@@ -1,6 +1,10 @@
 package r411.filrouge;
 
 import android.media.Rating;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Product {
+public class Product implements Parcelable {
 
     @JsonProperty("id")
     private int id;
@@ -40,6 +44,15 @@ public class Product {
         this.description = description;
         this.category = category;
         this.image = image;
+    }
+
+    protected Product(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        price = in.readDouble();
+        description = in.readString();
+        category = in.readString();
+        image = in.readString();
     }
 
     @JsonProperty("id")
@@ -105,6 +118,21 @@ public class Product {
         this.rating = rating;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeDouble(price);
+        dest.writeString(description);
+        dest.writeString(category);
+        dest.writeString(image);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Rating {
         private double rate;
@@ -133,5 +161,6 @@ public class Product {
             this.count = count;
         }
     }
+
 }
 
