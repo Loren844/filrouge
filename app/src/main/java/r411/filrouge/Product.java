@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Product implements Parcelable {
-
     @JsonProperty("id")
     private int id;
 

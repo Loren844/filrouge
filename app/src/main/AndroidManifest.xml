@@ -24,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CommentActivity"
+            android:exported="true" />
+
         <activity android:name=".CartActivity"></activity>
         <activity android:name=".LikedItemsActivity"></activity>
     </application>

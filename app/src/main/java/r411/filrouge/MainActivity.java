@@ -12,6 +12,9 @@ import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,11 +26,21 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private static String comment;
+
+    public static String getComment() {
+        return comment;
+    }
+
+    public static void setComment(String comment) {
+        MainActivity.comment = comment;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ProductListAdapter adapter = new ProductListAdapter(this);
 
         // Animation du logo Zonama
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -42,6 +55,24 @@ public class MainActivity extends AppCompatActivity {
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<List<Product>> call = apiService.getProducts();
+
+        Button buttonSendComment = findViewById(R.id.commentButton);
+        if (getIntent().hasExtra("comment")) {
+            String comment = getIntent().getStringExtra("comment");
+            this.comment=comment;
+        }
+
+        buttonSendComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), CommentActivity.class);
+                intent.putExtra("comment", comment);
+                v.getContext().startActivity(intent);
+
+
+            }
+        });
+
 
         call.enqueue(new Callback<List<Product>>() {
             @Override
