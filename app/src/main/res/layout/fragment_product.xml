@@ -89,6 +89,15 @@
             android:text="Description détaillée du produit..."
             android:justificationMode="inter_word"/>
 
+        <TextView
+            android:id="@+id/nb_product_in_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:text="Nombre de produits : 0"
+            android:layout_gravity="center"/>
+
         <Button
             android:id="@+id/add_to_cart_button"
             android:layout_width="wrap_content"

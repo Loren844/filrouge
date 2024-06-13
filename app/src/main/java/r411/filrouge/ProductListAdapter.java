@@ -1,13 +1,16 @@
 package r411.filrouge;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,15 +98,18 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             }
         });
 
-        //si l'activité est CartActivity, on cache certaines infos
+        //si l'activité est CartActivity, on cache certaines infos et on affiche d'autres
         if(context.getClass().getSimpleName().equals("CartActivity")) {
             holder.add_to_cart_button.setVisibility(View.GONE);
             holder.ratingBar.setVisibility(View.GONE);
             holder.rating.setVisibility(View.GONE);
             holder.count.setVisibility(View.GONE);
             holder.delete_to_cart_button.setVisibility(View.VISIBLE);
+            holder.nb_product_in_cart.setVisibility(View.VISIBLE);
+            holder.nb_product_in_cart.setText("Nombre de produits : " + String.valueOf(Cart.getInstance().getProductList().get(product)));
         } else {
             holder.delete_to_cart_button.setVisibility(View.GONE);
+            holder.nb_product_in_cart.setVisibility(View.GONE);
         }
 
         holder.add_to_cart_button.setOnClickListener(new View.OnClickListener() {
@@ -135,11 +141,46 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.delete_to_cart_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Cart.getInstance().removeProduct(product);
-                productList.remove(product);
-                notifyDataSetChanged();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Sélectionner la quantité à supprimer");
+
+                // Créer le NumberPicker
+                final NumberPicker numberPicker = new NumberPicker(context);
+                numberPicker.setMinValue(1); // Valeur minimale (1)
+                numberPicker.setMaxValue(Cart.getInstance().getProductList().get(product)); // Valeur maximale
+                numberPicker.setValue(1); // Valeur par défaut
+
+                // Ajouter le NumberPicker au dialogue
+                builder.setView(numberPicker);
+
+                // Boutons pour confirmer ou annuler
+                builder.setPositiveButton("Supprimer", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int quantityToRemove = numberPicker.getValue();
+                        if(quantityToRemove == Cart.getInstance().getProductList().get(product)) {
+                            productList.remove(product);
+                            Cart.getInstance().removeProduct(product);
+                        } else {
+                            Cart.getInstance().setProductQuantity(product, quantityToRemove);
+                        }
+                        notifyDataSetChanged();
+                    }
+                });
+
+                builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                // Afficher le dialogue
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
+
     }
 
     public void onAddToCartButtonClicked(Product product) {
@@ -160,6 +201,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         Button add_to_cart_button = itemView.findViewById(R.id.add_to_cart_button);
         Button delete_to_cart_button = itemView.findViewById(R.id.delete_to_cart_button);
         ImageButton like_button = itemView.findViewById(R.id.like_button);
+
+        TextView nb_product_in_cart = itemView.findViewById(R.id.nb_product_in_cart);
         int rate = -1;
 
         public ProductViewHolder(@NonNull View itemView) {
