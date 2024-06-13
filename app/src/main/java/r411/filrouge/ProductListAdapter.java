@@ -19,6 +19,12 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private Context context;
     private List<Product> productList;
+    OnSaleProductList onSaleProductList = OnSaleProductList.getInstance();
+
+    public ProductListAdapter(Context context) {
+        this.context = context;
+        this.productList = onSaleProductList.getUserList();
+    }
 
     public ProductListAdapter(Context context, List<Product> productList) {
         this.context = context;
@@ -39,7 +45,19 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.price.setText(String.valueOf(product.getPrice()) + " €");
         holder.rating.setText(String.valueOf("Note moyenne : " + product.getRating().getRate()));
         holder.count.setText(String.valueOf(product.getRating().getCount()) + " avis");
-        holder.description.setText(product.getDescription());
+        String description = product.getDescription();
+        int maxLength = 200;
+        if (description.length() > maxLength) {
+            int endIndex = maxLength;
+            while (endIndex < description.length() && description.charAt(endIndex) != '.' && description.charAt(endIndex) != ',') {
+                endIndex++;
+            }
+            if (endIndex < description.length()) {
+                endIndex++;
+            }
+            description = description.substring(0, endIndex);
+        }
+        holder.description.setText(description);
         Picasso.get().load(product.getImage()).into(holder.image);
 
         holder.ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -63,8 +81,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             }
         });
     }
-
-
 
     @Override
     public int getItemCount() {

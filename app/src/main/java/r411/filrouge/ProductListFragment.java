@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +22,18 @@ import r411.filrouge.R;
 public class ProductListFragment extends Fragment {
 
     private List<Product> productList;
+    private OnSaleProductList onSaleProductList;
 
     public ProductListFragment() {
         // Constructeur vide requis
+    }
+
+    public static ProductListFragment newInstance() {
+        ProductListFragment fragment = new ProductListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("onSaleProductList", (Serializable) OnSaleProductList.getInstance());
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public static ProductListFragment newInstance(List<Product> productList) {
@@ -37,9 +48,13 @@ public class ProductListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            productList = (List<Product>) getArguments().getSerializable("productList");
+            if(getArguments().containsKey("onSaleProductList")) {
+                onSaleProductList = (OnSaleProductList) getArguments().getSerializable("onSaleProductList");
+            } else {
+                productList = (List<Product>) getArguments().getSerializable("productList");
+            }
         } else {
-            productList = new ArrayList<>(); // Initialiser productList pour éviter NullPointerException
+            productList = new ArrayList<>();
         }
     }
 
@@ -49,8 +64,13 @@ public class ProductListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ProductListAdapter adapter = new ProductListAdapter(getContext(), productList);
-        recyclerView.setAdapter(adapter);
+
+        if(productList == null) {
+            recyclerView.setAdapter(new ProductListAdapter(getContext()));
+        } else {
+            recyclerView.setAdapter(new ProductListAdapter(getContext(), productList));
+        }
+
         return view;
     }
 }

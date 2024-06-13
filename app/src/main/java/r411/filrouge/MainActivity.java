@@ -44,9 +44,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
+                    OnSaleProductList onSaleProductList = OnSaleProductList.getInstance();
                     List<Product> productList = response.body();
+                    for (Product product : productList) {
+                        onSaleProductList.addProduct(product);
+                    }
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_product_list, ProductListFragment.newInstance(productList))
+                            .replace(R.id.fragment_product_list, ProductListFragment.newInstance())
                             .commit();
                 } else {
                     Toast.makeText(MainActivity.this, "Erreur de chargement des produits", Toast.LENGTH_SHORT).show();
